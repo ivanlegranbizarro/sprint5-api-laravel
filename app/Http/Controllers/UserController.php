@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -23,10 +24,27 @@ class UserController extends Controller
   public function store(StoreUserRequest $request): JsonResponse
   {
     $data = $request->validated();
+    $data['password'] = bcrypt($data['password']);
+    $user = User::create($data);
 
-    User::create($data);
+    $token = $user->createToken('auth_token')->accessToken;
 
-    return response()->json(['message' => 'User created successfully', 201]);
+    return response()->json(['message' => 'User created successfully', 'token' => $token], 201);
+  }
+
+  /**
+   * Login the specified user
+   */
+  public function login(LoginRequest $request): JsonResponse
+  {
+    $data = $request->validated();
+    if (!auth()->attempt($data)) {
+      return response()->json(['message' => 'Invalid credentials'], 401);
+    }
+
+    $token = auth()->user()->createToken('auth_token')->accessToken;
+
+    return response()->json(['token' => $token], 200);
   }
 
   /**
