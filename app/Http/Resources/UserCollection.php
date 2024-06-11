@@ -14,10 +14,12 @@ class UserCollection extends ResourceCollection
    */
   public function toArray(Request $request): array
   {
-    return [
-      'id' => $this->id,
-      'nickname' => $this->nickname,
-      'email' => $this->email
-    ];
+    return $this->collection->map(function ($user) {
+      return [
+        'id' => $user->id,
+        'nickname' => $user->nickname,
+        'email' => $user->email,
+      ];
+    })->all();
   }
 }

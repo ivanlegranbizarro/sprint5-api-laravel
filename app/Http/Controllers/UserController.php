@@ -18,7 +18,7 @@ class UserController extends Controller
   public function index(): JsonResponse
   {
     $users = User::where('role', 'user')->get();
-    return response()->json(new UserCollection($users), 200);
+    return response()->json(UserResource::collection($users), 200);
   }
 
   /**

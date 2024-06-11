@@ -6,3 +6,18 @@ Accept: application/json
   "email": "test@test.com",
   "password": "password"
 }
+###
+POST http://127.0.0.1:8000/api/players/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "test@test.com",
+  "password": "password"
+}
+###
+GET http://127.0.0.1:8000/api/players
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5YzQxMjY0My1lODE3LTRkZjktODkyZi0xYTIyNjhmZWM3OGIiLCJqdGkiOiJiNDY1MTBmMzdiZjEyY2M4YjczOWY5OGIwNjkwNWI3NjE1NWRjYzQ3YTc4MmY0MDRmYWM4ODZmNTQ1NDMwOWY1MDVkZWUyMjM2MThjNmIxMiIsImlhdCI6MTcxODExNDQ5OC4yNTIyODQsIm5iZiI6MTcxODExNDQ5OC4yNTIyODUsImV4cCI6MTc0OTY1MDQ5OC4yNDM3MzcsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.C9dMIK1vPl5TeFshUFjF_PRitZcmvtH-zse1bcJiKuErYXcP3l38ykHzyMsy7ALaIwI-fx99l-QJPBhZlqQvjbnFvFAxj7nxUGqV2NsQyOJQMem398nZGLQzDhTnJiD2wU4FpvaalXG1l1H1a9GxffEfB5gW-mvRhP5Fi9CGIKyazP95EzM-ffA-VfhlbPvVLkkkqbnklpGE66ghD2Y4uLglK9wvJkhs6FFZWnFcCPxtlyTsLx9TnyzTg6XnJ7kjK9eEbQ8O8KmPnIaatBBGrubNobQH6Gec3BpJiFsQIVQgJhAWs4jnT3Aqp8V2eUuzO5QpA1kWNCpYv1IKnyOcRUmiTunh4Th3Wf5WHavtWrDiWSBLvGG1ZgUWkyl9oCLbXKQS_OgI5f6VclUI7BfkJXUtcF9rGH9cTRo9s9-J8sbLQ_ZZw2dp6zqfnQUy-auTxLM0OKqBhiGUK1ihQDcOcxy-fuJP8zOgi6CdIARif6rkejCg_lCFkyuX43uuMk-xinDBPnLOfvFRoODd2LMU3d7ciovY5W4xxSPIMoJWjGBr3agihRuPr6poBaKw2QKNEC0m5xRPt2QJKW_jwLh3O5t-Rmoi6LaGeDxsrFMAugulexUGO9myDpA-ArGtf3Hixn8R-fvlM7V5GVfn39muWukPET2GbzJ2M52UcKfA_oA
+###
