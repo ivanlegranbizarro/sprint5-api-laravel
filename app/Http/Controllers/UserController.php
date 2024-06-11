@@ -9,6 +9,7 @@ use App\Http\Resources\UserShowResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -17,6 +18,7 @@ class UserController extends Controller
    */
   public function index(): JsonResponse
   {
+    Gate::authorize('viewAny', User::class);
     $users = User::where('role', 'user')->get();
     return response()->json(UserIndexResource::collection($users), 200);
   }
@@ -55,6 +57,7 @@ class UserController extends Controller
    */
   public function show(User $user): JsonResponse
   {
+    Gate::authorize('view', $user);
     return response()->json(UserShowResource::make($user), 200);
   }
 
