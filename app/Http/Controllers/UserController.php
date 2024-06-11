@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Resources\UserCollection;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\UserIndexResource;
+use App\Http\Resources\UserShowResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class UserController extends Controller
   public function index(): JsonResponse
   {
     $users = User::where('role', 'user')->get();
-    return response()->json(UserResource::collection($users), 200);
+    return response()->json(UserIndexResource::collection($users), 200);
   }
 
   /**
@@ -55,7 +55,7 @@ class UserController extends Controller
    */
   public function show(User $user): JsonResponse
   {
-    return response()->json(new UserResource($user), 200);
+    return response()->json(UserShowResource::make($user), 200);
   }
 
   /**
