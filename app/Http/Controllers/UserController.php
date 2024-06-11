@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,9 +15,10 @@ class UserController extends Controller
   /**
    * Display a listing of the resource.
    */
-  public function index()
+  public function index(): JsonResponse
   {
-    //
+    $users = User::where('role', 'user')->get();
+    return response()->json(new UserCollection($users), 200);
   }
 
   /**
@@ -50,9 +53,9 @@ class UserController extends Controller
   /**
    * Display the specified resource.
    */
-  public function show(User $user)
+  public function show(User $user): JsonResponse
   {
-    //
+    return response()->json(new UserResource($user), 200);
   }
 
   /**
