@@ -23,7 +23,7 @@ class GameController extends Controller
   {
     $user_id = auth()->user()->id;
     $games = Game::where('user_id', $user_id)->get();
-    return response()->json(GameGroupedByPlayerResource::collection($games), 200);
+    return response()->json(GameResource::collection($games), 200);
   }
 
   /**
