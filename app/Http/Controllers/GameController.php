@@ -13,16 +13,23 @@ class GameController extends Controller
   /**
    * Display a listing of the resource.
    */
-  public function index(): JsonResponse
+  public function admiIndex(): JsonResponse
   {
     $games = Game::all();
+    return response()->json(GameGroupedByPlayerResource::collection($games), 200);
+  }
+
+  public function playerIndex(): JsonResponse
+  {
+    $user_id = auth()->user()->id;
+    $games = Game::where('user_id', $user_id)->get();
     return response()->json(GameGroupedByPlayerResource::collection($games), 200);
   }
 
   /**
    * Store a newly created resource in storage.
    */
-  public function store()
+  public function playGame()
   {
     $newGame = new Game();
     $user_id = auth()->user()->id;
