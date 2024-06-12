@@ -17,6 +17,8 @@ class GameResource extends JsonResource
     return [
       'result' => $this->result,
       'won' => $this->won ? 'Yes' : 'No',
+      'dice1' => $this->dice1,
+      'dice2' => $this->dice2,
       'played_at' => $this->created_at->format('Y-m-d H:i:s'),
     ];
   }

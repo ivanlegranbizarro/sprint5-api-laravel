@@ -29,15 +29,14 @@ class GameController extends Controller
   /**
    * Store a newly created resource in storage.
    */
-  public function playGame()
+  public function playGame(): JsonResponse
   {
     $newGame = new Game();
-    $user_id = auth()->user()->id;
-    $newGame->user_id = $user_id;
-    $dice1 = rand(1, 6);
-    $dice2 = rand(1, 6);
-    $dice1 + $dice2 >= 7 ? $newGame->won = true : $newGame->won = false;
-    $newGame->result = $dice1 + $dice2;
+    $newGame->user_id = auth()->user()->id;
+    $newGame->dice1 = rand(1, 6);
+    $newGame->dice2 = rand(1, 6);
+    $newGame->result = $newGame->dice1 + $newGame->dice2;
+    $newGame->won = $newGame->result >= 7;
     $newGame->save();
     return response()->json(GameResource::make($newGame), 201);
   }
