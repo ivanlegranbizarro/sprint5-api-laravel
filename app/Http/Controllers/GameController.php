@@ -13,7 +13,7 @@ class GameController extends Controller
   /**
    * Display a listing of the resource.
    */
-  public function admiIndex(): JsonResponse
+  public function adminIndex(): JsonResponse
   {
     $games = Game::all();
     return response()->json(GameGroupedByPlayerResource::collection($games), 200);
