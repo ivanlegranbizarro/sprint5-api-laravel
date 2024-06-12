@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreGameRequest;
-use App\Http\Requests\UpdateGameRequest;
+use App\Http\Requests\DeleteAllGamesForUserRequest;
 use App\Http\Resources\GameGroupedByPlayerResource;
 use App\Http\Resources\GameResource;
 use App\Models\Game;
@@ -17,38 +16,44 @@ class GameController extends Controller
   public function index(): JsonResponse
   {
     $games = Game::all();
-    return response()->json(GameGroupedByPlayerResource::collection($games));
+    return response()->json(GameGroupedByPlayerResource::collection($games), 200);
   }
 
   /**
    * Store a newly created resource in storage.
    */
-  public function store(StoreGameRequest $request)
+  public function store()
   {
-    //
+    $newGame = new Game();
+    $user_id = auth()->user()->id;
+    $newGame->user_id = $user_id;
+    $dice1 = rand(1, 6);
+    $dice2 = rand(1, 6);
+    if ($dice1 + $dice2 >= 7) {
+      $newGame->won = true;
+    }
+    $newGame->result = $dice1 + $dice2;
+    $newGame->save();
+    return response()->json(GameResource::make($newGame), 201);
   }
 
   /**
    * Display the specified resource.
    */
-  public function show(Game $game)
+  public function show(Game $game): JsonResponse
   {
     return response()->json(GameResource::make($game));
   }
 
   /**
-   * Update the specified resource in storage.
-   */
-  public function update(UpdateGameRequest $request, Game $game)
-  {
-    //
-  }
-
-  /**
    * Remove the specified resource from storage.
    */
-  public function destroy(Game $game)
+  public function destroy(DeleteAllGamesForUserRequest $request): JsonResponse
   {
-    //
+    $data = $request->validated();
+
+    Game::where('user_id', $data['user_id'])->delete();
+
+    return response()->json(null, 204);
   }
 }
