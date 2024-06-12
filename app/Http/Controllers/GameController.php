@@ -29,9 +29,7 @@ class GameController extends Controller
     $newGame->user_id = $user_id;
     $dice1 = rand(1, 6);
     $dice2 = rand(1, 6);
-    if ($dice1 + $dice2 >= 7) {
-      $newGame->won = true;
-    }
+    $dice1 + $dice2 >= 7 ? $newGame->won = true : $newGame->won = false;
     $newGame->result = $dice1 + $dice2;
     $newGame->save();
     return response()->json(GameResource::make($newGame), 201);
