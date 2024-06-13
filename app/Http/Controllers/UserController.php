@@ -76,7 +76,7 @@ class UserController extends Controller
     return response()->json(['message' => 'Nickname updated successfully'], 200);
   }
 
-  public function ranking(StatisticsService $statistics, User $user): JsonResponse
+  public function ranking(StatisticsService $statistics): JsonResponse
   {
     $users = User::where('role', 'user')->get();
     $rankedUsers = $statistics->rankingAllPlayers($users);
@@ -84,7 +84,7 @@ class UserController extends Controller
     return response()->json($rankedUsers, 200);
   }
 
-  public function bestPlayer(StatisticsService $statistics, User $user): JsonResponse
+  public function bestPlayer(StatisticsService $statistics): JsonResponse
   {
     $users = User::where('role', 'user')->get();
     $bestPlayer = $statistics->rankingBestPlayer($users);
@@ -92,7 +92,7 @@ class UserController extends Controller
     return response()->json($bestPlayer, 200);
   }
 
-  public function worstPlayer(StatisticsService $statistics, User $user): JsonResponse
+  public function worstPlayer(StatisticsService $statistics): JsonResponse
   {
     $users = User::where('role', 'user')->get();
     $worstPlayer = $statistics->rankingWorstPlayer($users);
