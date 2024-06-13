@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateNicknameRequest;
 use App\Http\Resources\UserIndexResource;
 use App\Http\Resources\UserShowResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
@@ -64,16 +64,11 @@ class UserController extends Controller
   /**
    * Update the specified resource in storage.
    */
-  public function update(Request $request, User $user)
+  public function update(UpdateNicknameRequest $request, User $user): JsonResponse
   {
-    //
-  }
+    $data = $request->validated();
+    $user->update($data);
 
-  /**
-   * Remove the specified resource from storage.
-   */
-  public function destroy(User $user)
-  {
-    //
+    return response()->json(['message' => 'Nickname updated successfully'], 200);
   }
 }
