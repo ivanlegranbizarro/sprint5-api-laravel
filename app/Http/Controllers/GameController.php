@@ -6,6 +6,7 @@ use App\Http\Requests\DeleteAllGamesForUserRequest;
 use App\Http\Resources\GameGroupedByPlayerResource;
 use App\Http\Resources\GameResource;
 use App\Models\Game;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
 class GameController extends Controller
@@ -52,11 +53,9 @@ class GameController extends Controller
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(DeleteAllGamesForUserRequest $request): JsonResponse
+  public function destroy(User $user): JsonResponse
   {
-    $data = $request->validated();
-
-    Game::where('user_id', $data['user_id'])->delete();
+    Game::where('user_id', $user->id)->delete();
 
     return response()->json(null, 204);
   }
