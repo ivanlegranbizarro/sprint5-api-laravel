@@ -13,6 +13,7 @@ class StatisticsService
     $wonGames = count(array_filter($games, function ($game) {
       return $game['won'];
     }));
-    return ($wonGames / $totalGames) * 100;
+    $successPercentage = ($wonGames / $totalGames) * 100;
+    return round($successPercentage, 2);
   }
 }

@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateNicknameRequest;
 use App\Http\Resources\UserIndexResource;
 use App\Http\Resources\UserShowResource;
 use App\Models\User;
+use App\Services\StatisticsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 
@@ -16,10 +17,13 @@ class UserController extends Controller
   /**
    * Display a listing of the resource.
    */
-  public function index(): JsonResponse
+  public function index(StatisticsService $statistics): JsonResponse
   {
     Gate::authorize('viewAny', User::class);
     $users = User::where('role', 'user')->get();
+    foreach ($users as $user) {
+      $user->success_percentage = $statistics->calculateSuccessPercentage($user->games->toArray());
+    }
     return response()->json(UserIndexResource::collection($users), 200);
   }
 

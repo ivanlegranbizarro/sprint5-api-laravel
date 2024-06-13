@@ -7,6 +7,7 @@ use App\Http\Resources\GameGroupedByPlayerResource;
 use App\Http\Resources\GameResource;
 use App\Models\Game;
 use App\Models\User;
+use App\Services\StatisticsService;
 use Illuminate\Http\JsonResponse;
 
 class GameController extends Controller
@@ -20,11 +21,15 @@ class GameController extends Controller
     return response()->json(GameGroupedByPlayerResource::collection($games), 200);
   }
 
-  public function playerIndex(): JsonResponse
+  public function playerIndex(StatisticsService $statistics): JsonResponse
   {
     $user_id = auth()->user()->id;
     $games = Game::where('user_id', $user_id)->get();
-    return response()->json(GameResource::collection($games), 200);
+    $your_statistics = $statistics->calculateSuccessPercentage($games->toArray());
+    return response()->json([
+      'games' => GameResource::collection($games),
+      'success_percentage' => $your_statistics
+    ]);
   }
 
   /**
