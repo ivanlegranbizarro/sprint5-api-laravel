@@ -45,9 +45,10 @@ class GameController extends Controller
   /**
    * Display the specified resource.
    */
-  public function show(Game $game): JsonResponse
+  public function show(User $user): JsonResponse
   {
-    return response()->json(GameResource::make($game));
+    $games = Game::where('user_id', $user->id)->get();
+    return response()->json(GameResource::collection($games), 200);
   }
 
   /**
