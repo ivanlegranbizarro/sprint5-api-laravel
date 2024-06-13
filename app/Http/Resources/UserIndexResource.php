@@ -17,7 +17,8 @@ class UserIndexResource extends JsonResource
     return [
       'id' => $this->id,
       'nickname' => $this->nickname,
-      'email' => $this->email
+      'email' => $this->email,
+      'success_percentage' => $this->success_percentage
     ];
   }
 }
