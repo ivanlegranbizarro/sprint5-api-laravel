@@ -78,6 +78,7 @@ class UserController extends Controller
 
   public function ranking(StatisticsService $statistics): JsonResponse
   {
+    Gate::authorize('ranking', User::class);
     $users = User::where('role', 'user')->get();
     $rankedUsers = $statistics->rankingAllPlayers($users);
 
@@ -86,6 +87,7 @@ class UserController extends Controller
 
   public function bestPlayer(StatisticsService $statistics): JsonResponse
   {
+    Gate::authorize('bestPlayer', User::class);
     $users = User::where('role', 'user')->get();
     $bestPlayer = $statistics->rankingBestPlayer($users);
 
@@ -94,6 +96,7 @@ class UserController extends Controller
 
   public function worstPlayer(StatisticsService $statistics): JsonResponse
   {
+    Gate::authorize('worstPlayer', User::class);
     $users = User::where('role', 'user')->get();
     $worstPlayer = $statistics->rankingWorstPlayer($users);
 

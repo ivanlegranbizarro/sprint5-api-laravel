@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\User;
+use Illuminate\Support\Collection;
+
 class StatisticsService
 {
   public function calculateSuccessPercentage(array $games): float
@@ -17,7 +20,7 @@ class StatisticsService
     return round($successPercentage, 2);
   }
 
-  public function rankingAllPlayers(array $users): array
+  public function rankingAllPlayers(Collection $users): Collection
   {
     foreach ($users as $user) {
       $user->success_percentage = $this->calculateSuccessPercentage($user->games->toArray());
@@ -25,14 +28,14 @@ class StatisticsService
     return $users;
   }
 
-  public function rankingBestPlayer(array $users): array
+  public function rankingBestPlayer(Collection $users): User
   {
     $users = $this->rankingAllPlayers($users);
     $bestPlayer = collect($users)->sortByDesc('success_percentage')->first();
     return $bestPlayer;
   }
 
-  public function rankingWorstPlayer(array $users): array
+  public function rankingWorstPlayer(Collection $users): User
   {
     $users = $this->rankingAllPlayers($users);
     $worstPlayer = collect($users)->sortBy('success_percentage')->first();
