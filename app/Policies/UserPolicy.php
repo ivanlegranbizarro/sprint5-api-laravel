@@ -61,4 +61,19 @@ class UserPolicy
   {
     return false;
   }
+
+  public function ranking(User $user): bool
+  {
+    return $user->role === 'admin';
+  }
+
+  public function bestPlayer(User $user): bool
+  {
+    return $user->role === 'admin';
+  }
+
+  public function worstPlayer(User $user): bool
+  {
+    return $user->role === 'admin';
+  }
 }
