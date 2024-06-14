@@ -12,7 +12,9 @@ use Illuminate\Http\JsonResponse;
 class GameController extends Controller
 {
   /**
-   * Display a listing of the resource.
+   * Display a listing of all games grouped by player for the admin.
+   *
+   * @return JsonResponse List of all games grouped by player.
    */
   public function adminIndex(): JsonResponse
   {
@@ -20,6 +22,12 @@ class GameController extends Controller
     return response()->json(GameGroupedByPlayerResource::collection($games), 200);
   }
 
+  /**
+   * Display a listing of games for the authenticated user and calculate their success percentage.
+   *
+   * @param StatisticsService $statistics Service to calculate statistics.
+   * @return JsonResponse List of games for the authenticated user and their success percentage.
+   */
   public function playerIndex(StatisticsService $statistics): JsonResponse
   {
     $user_id = auth()->user()->id;
@@ -32,7 +40,9 @@ class GameController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
+   * Store a newly created game in storage.
+   *
+   * @return JsonResponse Details of the newly created game.
    */
   public function playGame(): JsonResponse
   {
@@ -47,7 +57,10 @@ class GameController extends Controller
   }
 
   /**
-   * Display the specified resource.
+   * Display a list of games for the specified user.
+   *
+   * @param User $user User whose games are to be retrieved.
+   * @return JsonResponse List of games for the specified user.
    */
   public function show(User $user): JsonResponse
   {
@@ -56,7 +69,10 @@ class GameController extends Controller
   }
 
   /**
-   * Remove the specified resource from storage.
+   * Remove all games of the specified user from storage.
+   *
+   * @param User $user User whose games are to be deleted.
+   * @return JsonResponse Empty response with status code 204 on success.
    */
   public function destroy(User $user): JsonResponse
   {

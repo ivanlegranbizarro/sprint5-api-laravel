@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Gate;
 class UserController extends Controller
 {
   /**
-   * Display a listing of the resource.
+   * Display a listing of all users.
+   *
+   * @param StatisticsService $statistics Service to calculate statistics.
+   * @return JsonResponse List of all users with their success percentage.
    */
   public function index(StatisticsService $statistics): JsonResponse
   {
@@ -28,7 +31,10 @@ class UserController extends Controller
   }
 
   /**
-   * Store a newly created resource in storage.
+   * Store a newly created user in storage.
+   *
+   * @param StoreUserRequest $request Request object containing the user data.
+   * @return JsonResponse Message and authentication token for the newly created user.
    */
   public function store(StoreUserRequest $request): JsonResponse
   {
@@ -42,7 +48,10 @@ class UserController extends Controller
   }
 
   /**
-   * Login the specified user
+   * Login the specified user.
+   *
+   * @param LoginRequest $request Request object containing the login data.
+   * @return JsonResponse Authentication token if login is successful, or error message if not.
    */
   public function login(LoginRequest $request): JsonResponse
   {
@@ -57,7 +66,10 @@ class UserController extends Controller
   }
 
   /**
-   * Display the specified resource.
+   * Display the specified user.
+   *
+   * @param User $user User to be displayed.
+   * @return JsonResponse User details.
    */
   public function show(User $user): JsonResponse
   {
@@ -66,7 +78,11 @@ class UserController extends Controller
   }
 
   /**
-   * Update the specified resource in storage.
+   * Update the specified user's nickname.
+   *
+   * @param UpdateNicknameRequest $request Request object containing the new nickname.
+   * @param User $user User whose nickname is to be updated.
+   * @return JsonResponse Message confirming successful update.
    */
   public function update(UpdateNicknameRequest $request, User $user): JsonResponse
   {
@@ -76,6 +92,12 @@ class UserController extends Controller
     return response()->json(['message' => 'Nickname updated successfully'], 200);
   }
 
+  /**
+   * Display a ranking of all users based on their success percentage.
+   *
+   * @param StatisticsService $statistics Service to calculate statistics.
+   * @return JsonResponse Ranking of all users.
+   */
   public function ranking(StatisticsService $statistics): JsonResponse
   {
     Gate::authorize('ranking', User::class);
@@ -85,6 +107,12 @@ class UserController extends Controller
     return response()->json($rankedUsers, 200);
   }
 
+  /**
+   * Display the user with the highest success percentage.
+   *
+   * @param StatisticsService $statistics Service to calculate statistics.
+   * @return JsonResponse Details of the best player.
+   */
   public function bestPlayer(StatisticsService $statistics): JsonResponse
   {
     Gate::authorize('bestPlayer', User::class);
@@ -94,6 +122,12 @@ class UserController extends Controller
     return response()->json($bestPlayer, 200);
   }
 
+  /**
+   * Display the user with the lowest success percentage.
+   *
+   * @param StatisticsService $statistics Service to calculate statistics.
+   * @return JsonResponse Details of the worst player.
+   */
   public function worstPlayer(StatisticsService $statistics): JsonResponse
   {
     Gate::authorize('worstPlayer', User::class);
