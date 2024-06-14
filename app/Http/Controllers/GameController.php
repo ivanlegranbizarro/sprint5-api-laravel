@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DeleteAllGamesForUserRequest;
 use App\Http\Resources\GameGroupedByPlayerResource;
 use App\Http\Resources\GameResource;
 use App\Models\Game;

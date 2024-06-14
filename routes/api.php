@@ -13,4 +13,7 @@ Route::prefix('players')->group(function () {
   Route::get('games/admin', [GameController::class, 'adminIndex'])->name('adminIndex')->middleware('auth:api');
   Route::get('{user}/games', [GameController::class, 'show'])->name('showPlayerGames')->middleware('auth:api');
   Route::delete('{user}/games', [GameController::class, 'destroy'])->name('destroyPlayerGames')->middleware('auth:api');
+  Route::get('ranking', [UserController::class, 'ranking'])->name('rankingAllPlayers')->middleware('auth:api');
+  Route::get('ranking/winner', [UserController::class, 'bestPlayer'])->name('rankingBestPlayer')->middleware('auth:api');
+  Route::get('ranking/loser', [UserController::class, 'worstPlayer'])->name('rankingWorstPlayer')->middleware('auth:api');
 });
