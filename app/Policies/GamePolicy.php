@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Game;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class GamePolicy
 {
@@ -13,7 +12,7 @@ class GamePolicy
    */
   public function viewAny(User $user): bool
   {
-    //
+    return $user->role === 'admin';
   }
 
   /**
@@ -45,7 +44,7 @@ class GamePolicy
    */
   public function delete(User $user, Game $game): bool
   {
-    return $user->id === $game->user_id;
+    //
   }
 
   /**
@@ -62,10 +61,5 @@ class GamePolicy
   public function forceDelete(User $user, Game $game): bool
   {
     //
-  }
-
-  public function adminIndex(User $user): bool
-  {
-    return $user->role === 'admin';
   }
 }

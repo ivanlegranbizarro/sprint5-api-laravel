@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\GameGroupedByPlayerResource;
 use App\Http\Resources\GameResource;
 use App\Models\Game;
 use App\Models\User;
@@ -22,10 +21,16 @@ class GameController extends Controller
    */
   public function adminIndex(): JsonResponse
   {
-    Gate::authorize('adminIndex', User::class);
-    $games = Game::all();
-    return response()->json(GameGroupedByPlayerResource::collection($games), 200);
+    Gate::authorize('viewAny', User::class);
+    $gamesGroupedByPlayer = Game::getGamesGroupedByPlayer();
+
+    if (empty($gamesGroupedByPlayer)) {
+      return response()->json(['message' => 'No games found'], 404);
+    }
+
+    return response()->json($gamesGroupedByPlayer, 200);
   }
+
 
   /**
    * @lrd:start
