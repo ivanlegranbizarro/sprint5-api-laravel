@@ -25,6 +25,6 @@ Después de instalar las dependencias, genera las llaves de Laravel con el sigui
 
 Finalmente, genera el cliente de Passport con el siguiente comando:
 
-    php artisan passport:client
+    php artisan passport:client --personal
 
 ### La url de landing del proyecto te redirigirá hacia la documentación interactiva de la API
