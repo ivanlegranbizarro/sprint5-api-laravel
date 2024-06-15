@@ -15,10 +15,13 @@ use Illuminate\Support\Facades\Gate;
 class UserController extends Controller
 {
   /**
+   * @lrd:start
+   * # User Index
    * Display a listing of all users.
    *
    * @param StatisticsService $statistics Service to calculate statistics.
    * @return JsonResponse List of all users with their success percentage.
+   * @lrd:end
    */
   public function index(StatisticsService $statistics): JsonResponse
   {
@@ -31,10 +34,13 @@ class UserController extends Controller
   }
 
   /**
+   * @lrd:start
+   * # Store User
    * Store a newly created user in storage.
    *
    * @param StoreUserRequest $request Request object containing the user data.
    * @return JsonResponse Message and authentication token for the newly created user.
+   * @lrd:end
    */
   public function store(StoreUserRequest $request): JsonResponse
   {
@@ -48,10 +54,13 @@ class UserController extends Controller
   }
 
   /**
+   * @lrd:start
+   * # User Login
    * Login the specified user.
    *
    * @param LoginRequest $request Request object containing the login data.
    * @return JsonResponse Authentication token if login is successful, or error message if not.
+   * @lrd:end
    */
   public function login(LoginRequest $request): JsonResponse
   {
@@ -66,10 +75,13 @@ class UserController extends Controller
   }
 
   /**
+   * @lrd:start
+   * # Show User
    * Display the specified user.
    *
    * @param User $user User to be displayed.
    * @return JsonResponse User details.
+   * @lrd:end
    */
   public function show(User $user): JsonResponse
   {
@@ -78,11 +90,14 @@ class UserController extends Controller
   }
 
   /**
+   * @lrd:start
+   * # Update User Nickname
    * Update the specified user's nickname.
    *
    * @param UpdateNicknameRequest $request Request object containing the new nickname.
    * @param User $user User whose nickname is to be updated.
    * @return JsonResponse Message confirming successful update.
+   * @lrd:end
    */
   public function update(UpdateNicknameRequest $request, User $user): JsonResponse
   {
@@ -93,10 +108,13 @@ class UserController extends Controller
   }
 
   /**
+   * @lrd:start
+   * # User Ranking
    * Display a ranking of all users based on their success percentage.
    *
    * @param StatisticsService $statistics Service to calculate statistics.
    * @return JsonResponse Ranking of all users.
+   * @lrd:end
    */
   public function ranking(StatisticsService $statistics): JsonResponse
   {
@@ -108,10 +126,13 @@ class UserController extends Controller
   }
 
   /**
+   * @lrd:start
+   * # Best Player
    * Display the user with the highest success percentage.
    *
    * @param StatisticsService $statistics Service to calculate statistics.
    * @return JsonResponse Details of the best player.
+   * @lrd:end
    */
   public function bestPlayer(StatisticsService $statistics): JsonResponse
   {
@@ -123,10 +144,13 @@ class UserController extends Controller
   }
 
   /**
+   * @lrd:start
+   * # Worst Player
    * Display the user with the lowest success percentage.
    *
    * @param StatisticsService $statistics Service to calculate statistics.
    * @return JsonResponse Details of the worst player.
+   * @lrd:end
    */
   public function worstPlayer(StatisticsService $statistics): JsonResponse
   {
