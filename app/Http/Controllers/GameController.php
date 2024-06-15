@@ -8,6 +8,7 @@ use App\Models\Game;
 use App\Models\User;
 use App\Services\StatisticsService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class GameController extends Controller
 {
@@ -21,6 +22,7 @@ class GameController extends Controller
    */
   public function adminIndex(): JsonResponse
   {
+    Gate::authorize('adminIndex', User::class);
     $games = Game::all();
     return response()->json(GameGroupedByPlayerResource::collection($games), 200);
   }
@@ -83,14 +85,16 @@ class GameController extends Controller
   /**
    * @lrd:start
    * # Delete Games
-   * Remove all games of the specified user from storage.
+   * Remove all games of the authenticated user.
    *
    * @param User $user User whose games are to be deleted.
    * @return JsonResponse Empty response with status code 204 on success.
    * @lrd:end
    */
-  public function destroy(User $user): JsonResponse
+  public function destroy(): JsonResponse
   {
+    $user = auth()->user();
+    Gate::authorize('delete', $user);
     Game::where('user_id', $user->id)->delete();
 
     return response()->json(null, 204);
