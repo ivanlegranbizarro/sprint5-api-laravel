@@ -12,9 +12,12 @@ use Illuminate\Http\JsonResponse;
 class GameController extends Controller
 {
   /**
+   * @lrd:start
+   * # Admin Index
    * Display a listing of all games grouped by player for the admin.
    *
    * @return JsonResponse List of all games grouped by player.
+   * @lrd:end
    */
   public function adminIndex(): JsonResponse
   {
@@ -23,10 +26,13 @@ class GameController extends Controller
   }
 
   /**
+   * @lrd:start
+   * # Player Index
    * Display a listing of games for the authenticated user and calculate their success percentage.
    *
    * @param StatisticsService $statistics Service to calculate statistics.
    * @return JsonResponse List of games for the authenticated user and their success percentage.
+   * @lrd:end
    */
   public function playerIndex(StatisticsService $statistics): JsonResponse
   {
@@ -40,9 +46,12 @@ class GameController extends Controller
   }
 
   /**
+   * @lrd:start
+   * # Play Game
    * Store a newly created game in storage.
    *
    * @return JsonResponse Details of the newly created game.
+   * @lrd:end
    */
   public function playGame(): JsonResponse
   {
@@ -57,10 +66,13 @@ class GameController extends Controller
   }
 
   /**
+   * @lrd:start
+   * # Show Games
    * Display a list of games for the specified user.
    *
    * @param User $user User whose games are to be retrieved.
    * @return JsonResponse List of games for the specified user.
+   * @lrd:end
    */
   public function show(User $user): JsonResponse
   {
@@ -69,10 +81,13 @@ class GameController extends Controller
   }
 
   /**
+   * @lrd:start
+   * # Delete Games
    * Remove all games of the specified user from storage.
    *
    * @param User $user User whose games are to be deleted.
    * @return JsonResponse Empty response with status code 204 on success.
+   * @lrd:end
    */
   public function destroy(User $user): JsonResponse
   {
