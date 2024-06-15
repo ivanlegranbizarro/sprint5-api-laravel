@@ -2,4 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/request-docs');
+Route::get('/', function () {
+  return redirect('request-docs');
+});
