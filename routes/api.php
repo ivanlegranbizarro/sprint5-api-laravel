@@ -20,10 +20,12 @@ Route::prefix('players')->group(function () {
       Route::delete('{user}', [GameController::class, 'destroy'])->name('destroyPlayerGames');
     });
 
-    Route::prefix('ranking')->group(function () {
-      Route::get('/', [UserController::class, 'ranking'])->name('rankingAllPlayers');
-      Route::get('winner', [UserController::class, 'bestPlayer'])->name('rankingBestPlayer');
-      Route::get('loser', [UserController::class, 'worstPlayer'])->name('rankingWorstPlayer');
+    Route::middleware('auth:api')->group(function () {
+      Route::prefix('ranking')->group(function () {
+        Route::get('/', [UserController::class, 'ranking'])->name('rankingAllPlayers');
+        Route::get('winner', [UserController::class, 'bestPlayer'])->name('rankingBestPlayer');
+        Route::get('loser', [UserController::class, 'worstPlayer'])->name('rankingWorstPlayer');
+      });
     });
   });
 });
