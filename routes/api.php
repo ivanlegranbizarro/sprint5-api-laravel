@@ -17,7 +17,7 @@ Route::prefix('players')->group(function () {
       Route::get('/', [GameController::class, 'playerIndex'])->name('playerIndex');
       Route::get('admin', [GameController::class, 'adminIndex'])->name('adminIndex');
       Route::get('{user}', [GameController::class, 'show'])->name('showPlayerGames');
-      Route::delete('{user}', [GameController::class, 'destroy'])->name('destroyPlayerGames');
+      Route::delete('', [GameController::class, 'destroy'])->name('destroyPlayerGames');
     });
 
     Route::middleware('auth:api')->group(function () {

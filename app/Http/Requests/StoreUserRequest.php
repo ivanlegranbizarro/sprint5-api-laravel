@@ -27,6 +27,8 @@ class StoreUserRequest extends FormRequest
       'nickname' => [
         'nullable',
         'string',
+        'min:3',
+        'max:20',
         function ($attribute, $value, $fail) {
           if ($value && User::where('nickname', $value)->exists()) {
             $fail('The ' . $attribute . ' has already been taken.');
