@@ -2,19 +2,29 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 
 class UserControllerTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-    public function test_example(): void
-    {
-        $response = $this->get('/');
+  use RefreshDatabase, WithFaker;
 
-        $response->assertStatus(200);
-    }
+  public function setUp(): void
+  {
+    parent::setUp();
+
+    Artisan::call('passport:client --name=<client-name> --no-interaction --personal');
+  }
+
+  #[Test]
+  public function new_player_can_be_registered(): void
+  {
+    $this->postJson('/api/players', [
+      'email' => 'ivan@ivan.com',
+      'password' => 'password',
+    ])->assertCreated();
+  }
 }
