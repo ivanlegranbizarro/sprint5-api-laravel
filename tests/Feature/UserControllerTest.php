@@ -27,4 +27,18 @@ class UserControllerTest extends TestCase
       'password' => 'password',
     ])->assertCreated();
   }
+
+  #[Test]
+  public function player_can_login(): void
+  {
+    $this->postJson('/api/players', [
+      'email' => 'ivan@ivan.com',
+      'password' => 'password',
+    ])->assertCreated();
+
+    $this->postJson('/api/players/login', [
+      'email' => 'ivan@ivan.com',
+      'password' => 'password',
+    ])->assertOk();
+  }
 }
