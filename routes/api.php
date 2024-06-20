@@ -7,11 +7,14 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('players')->group(function () {
   Route::post('login', [UserController::class, 'login'])->name('login');
   Route::post('', [UserController::class, 'store'])->name('store');
-  Route::apiResource('/', UserController::class)
-    ->middleware('auth:api')
-    ->except('store', 'destroy');
 
   Route::middleware('auth:api')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('index');
+    Route::get('{user}', [UserController::class, 'show'])->name('show');
+    Route::put('{user}', [UserController::class, 'update'])->name('update');
+    Route::patch('{user}', [UserController::class, 'update'])->name('update.patch');
+    Route::delete('{user}', [UserController::class, 'destroy'])->name('destroy');
+
     Route::prefix('games')->group(function () {
       Route::post('/', [GameController::class, 'playGame'])->name('playGame');
       Route::get('/', [GameController::class, 'playerIndex'])->name('playerIndex');
@@ -20,12 +23,10 @@ Route::prefix('players')->group(function () {
       Route::delete('', [GameController::class, 'destroy'])->name('destroyPlayerGames');
     });
 
-    Route::middleware('auth:api')->group(function () {
-      Route::prefix('ranking')->group(function () {
-        Route::get('/', [UserController::class, 'ranking'])->name('rankingAllPlayers');
-        Route::get('winner', [UserController::class, 'bestPlayer'])->name('rankingBestPlayer');
-        Route::get('loser', [UserController::class, 'worstPlayer'])->name('rankingWorstPlayer');
-      });
+    Route::prefix('ranking')->group(function () {
+      Route::get('/', [UserController::class, 'ranking'])->name('rankingAllPlayers');
+      Route::get('winner', [UserController::class, 'bestPlayer'])->name('rankingBestPlayer');
+      Route::get('loser', [UserController::class, 'worstPlayer'])->name('rankingWorstPlayer');
     });
   });
 });

@@ -101,6 +101,7 @@ class UserController extends Controller
    */
   public function update(UpdateNicknameRequest $request, User $user): JsonResponse
   {
+    Gate::authorize('update', $user);
     $data = $request->validated();
     $user->update($data);
 

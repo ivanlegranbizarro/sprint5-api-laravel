@@ -51,20 +51,34 @@ class UserControllerTest extends TestCase
   }
 
   #[Test]
-  public function get_all_users_is_unauthorized_without_auth(): void
+  public function get_all_players_only_if_auth_and_admin(): void
   {
     $this->getJson('/api/players')->assertUnauthorized();
-  }
 
-  #[Test]
-  public function get_all_users_is_forbidden_without_admin(): void
-  {
     $this->actingAs($this->user, 'api')->getJson('/api/players')->assertForbidden();
+
+    $this->actingAs($this->admin, 'api')->getJson('/api/players')->assertOk();
   }
 
   #[Test]
-  public function get_all_players_with_auth_and_admin(): void
+  public function user_nickname_must_be_anonymous_if_not_provided(): void
   {
-    $this->actingAs($this->admin, 'api')->getJson('/api/players')->assertOk();
+    $this->assertEquals('Anonymous', $this->user->nickname);
+  }
+
+  #[Test]
+  public function nickname_can_be_updated_only_if_auth_and_admin(): void
+  {
+    $this->putJson('/api/players/' . $this->user->id, [
+      'nickname' => 'Iván',
+    ])->assertUnauthorized();
+
+    $this->actingAs($this->user, 'api')->putJson('/api/players/' . $this->user->id, [
+      'nickname' => 'Iván'
+    ])->assertForbidden();
+
+    $this->actingAs($this->admin, 'api')->putJson('/api/players/' . $this->user->id, [
+      'nickname' => 'Iván'
+    ])->assertOk();
   }
 }
