@@ -8,6 +8,12 @@ Route::prefix('players')->group(function () {
   Route::post('login', [UserController::class, 'login'])->name('login');
   Route::post('', [UserController::class, 'store'])->name('store');
 
+  Route::prefix('ranking')->group(function () {
+    Route::get('/', [UserController::class, 'ranking'])->name('rankingAllPlayers');
+    Route::get('winner', [UserController::class, 'bestPlayer'])->name('rankingBestPlayer');
+    Route::get('loser', [UserController::class, 'worstPlayer'])->name('rankingWorstPlayer');
+  });
+
   Route::middleware('auth:api')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('index');
     Route::get('{user}', [UserController::class, 'show'])->name('show');
@@ -18,12 +24,6 @@ Route::prefix('players')->group(function () {
     Route::prefix('games')->group(function () {
       Route::post('/', [GameController::class, 'playGame'])->name('playGame');
       Route::get('admin', [GameController::class, 'adminIndex'])->name('adminIndex');
-    });
-
-    Route::prefix('ranking')->group(function () {
-      Route::get('/', [UserController::class, 'ranking'])->name('rankingAllPlayers');
-      Route::get('winner', [UserController::class, 'bestPlayer'])->name('rankingBestPlayer');
-      Route::get('loser', [UserController::class, 'worstPlayer'])->name('rankingWorstPlayer');
     });
   });
 });

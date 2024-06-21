@@ -105,4 +105,49 @@ class UserControllerTest extends TestCase
     $this->assertArrayHasKey('success_percentage', $foundUser);
     $this->assertIsNumeric($foundUser['success_percentage']);
   }
+
+  #[Test]
+  public function ranking_displays_correctly_only_if_auth_and_admin(): void
+  {
+    $player1 = User::factory(
+      [
+        'email' => 'player1@player1.com',
+        'nickname' => 'player1',
+        'password' => bcrypt('password'),
+      ]
+    )->create();
+
+    $player2 = User::factory(
+      [
+        'email' => 'player2@player2.com',
+        'nickname' => 'player2',
+        'password' => bcrypt('password'),
+      ]
+    )->create();
+
+    Game::create([
+      'user_id' => $player1->id,
+      'dice1' => 7,
+      'dice2' => 7,
+      'result' => 14,
+      'won' => 1
+    ]);
+
+    Game::create([
+      'user_id' => $player2->id,
+      'dice1' => 1,
+      'dice2' => 1,
+      'result' => 2,
+      'won' => 0
+    ]);
+
+    $this->actingAs($this->user, 'api')->getJson('/api/players/ranking')->assertForbidden();
+
+    $this->actingAs($this->admin, 'api')->getJson('/api/players/ranking')->assertOk();
+
+    $response = $this->actingAs($this->admin, 'api')->getJson('/api/players/ranking');
+
+    $this->assertEquals($response->json()[0]['nickname'], 'player1');
+    $this->assertEquals($response->json()[1]['nickname'], 'player2');
+  }
 }
