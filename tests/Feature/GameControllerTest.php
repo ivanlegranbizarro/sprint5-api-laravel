@@ -64,13 +64,18 @@ class GameControllerTest extends TestCase
   }
 
   #[Test]
-  public function player_can_play_a_game(): void
+  public function admin_can_delete_all_games_from_given_player(): void
   {
     Game::factory(10)->create([
       'user_id' => $this->user->id,
     ]);
-    $this->postJson('/api/players/games', [
-      'player_id' => $this->user->id,
-    ])->assertCreated();
+
+    $this->actingAs($this->user, 'api')->deleteJson('/api/players/' . $this->user->id . '/games')->assertForbidden();
+
+    $this->assertDatabaseCount('games', 10);
+
+    $this->actingAs($this->admin, 'api')->deleteJson('/api/players/' . $this->user->id . '/games')->assertNoContent();
+
+    $this->assertDatabaseCount('games', 0);
   }
 }
