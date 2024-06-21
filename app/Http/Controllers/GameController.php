@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\GameResource;
 use App\Models\Game;
 use App\Models\User;
-use App\Services\StatisticsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 
@@ -54,15 +53,14 @@ class GameController extends Controller
   /**
    * @lrd:start
    * # Delete Games
-   * Remove all games of the authenticated user.
+   * Remove all games for the given user.
    *
    * @param User $user User whose games are to be deleted.
    * @return JsonResponse Empty response with status code 204 on success.
    * @lrd:end
    */
-  public function destroy(): JsonResponse
+  public function destroy(User $user): JsonResponse
   {
-    $user = auth()->user();
     Gate::authorize('delete', $user);
     Game::where('user_id', $user->id)->delete();
 

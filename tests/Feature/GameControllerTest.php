@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\Game;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\Artisan;
@@ -60,5 +61,16 @@ class GameControllerTest extends TestCase
           ],
         ],
       ]);
+  }
+
+  #[Test]
+  public function player_can_play_a_game(): void
+  {
+    Game::factory(10)->create([
+      'user_id' => $this->user->id,
+    ]);
+    $this->postJson('/api/players/games', [
+      'player_id' => $this->user->id,
+    ])->assertCreated();
   }
 }

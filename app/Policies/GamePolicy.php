@@ -44,7 +44,7 @@ class GamePolicy
    */
   public function delete(User $user, Game $game): bool
   {
-    //
+    return $user->role === 'admin';
   }
 
   /**

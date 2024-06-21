@@ -13,11 +13,11 @@ Route::prefix('players')->group(function () {
     Route::get('{user}', [UserController::class, 'show'])->name('show');
     Route::put('{user}', [UserController::class, 'update'])->name('update');
     Route::patch('{user}', [UserController::class, 'update'])->name('update.patch');
+    Route::delete('{user}/games', [GameController::class, 'destroy'])->name('destroyPlayerGames');
 
     Route::prefix('games')->group(function () {
       Route::post('/', [GameController::class, 'playGame'])->name('playGame');
       Route::get('admin', [GameController::class, 'adminIndex'])->name('adminIndex');
-      Route::delete('', [GameController::class, 'destroy'])->name('destroyPlayerGames');
     });
 
     Route::prefix('ranking')->group(function () {
