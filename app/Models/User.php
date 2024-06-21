@@ -14,6 +14,17 @@ class User extends Authenticatable
 {
   use HasFactory, Notifiable, HasApiTokens;
 
+  protected static function boot()
+  {
+    parent::boot();
+
+    static::creating(function ($user) {
+      if (empty($user->nickname)) {
+        $user->nickname = 'Anonymous';
+      }
+    });
+  }
+
   /**
    * The attributes that are mass assignable.
    *
