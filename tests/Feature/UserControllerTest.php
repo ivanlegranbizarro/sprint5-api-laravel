@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Game;
 use Tests\TestCase;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\Test;
@@ -80,5 +81,28 @@ class UserControllerTest extends TestCase
     $this->actingAs($this->admin, 'api')->putJson('/api/players/' . $this->user->id, [
       'nickname' => 'Iván'
     ])->assertOk();
+  }
+
+  #[Test]
+  public function admin_can_check_list_of_all_users_and_their_statistics(): void
+  {
+    Game::factory(10)->create([
+      'user_id' => $this->user->id,
+    ]);
+
+    $this->getJson('/api/players')->assertUnauthorized();
+
+    $response = $this->actingAs($this->admin, 'api')->getJson('/api/players');
+
+    $response->assertOk();
+
+    $responseData = $response->json();
+
+    $foundUser = collect($responseData)->firstWhere('email', $this->user->email);
+
+    $this->assertNotNull($foundUser, 'User with email ' . $this->user->email . ' not found in response.');
+
+    $this->assertArrayHasKey('success_percentage', $foundUser);
+    $this->assertIsNumeric($foundUser['success_percentage']);
   }
 }

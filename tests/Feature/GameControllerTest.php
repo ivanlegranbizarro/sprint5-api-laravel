@@ -39,4 +39,26 @@ class GameControllerTest extends TestCase
 
     $this->actingAs($this->user, 'api')->postJson('/api/players/games', [])->assertCreated();
   }
+
+  #[Test]
+  public function admin_can_display_all_games_grouped_by_players(): void
+  {
+    $this->getJson('/api/players/games/admin')->assertUnauthorized();
+
+    $response = $this->actingAs($this->admin, 'api')->getJson('/api/players/games/admin');
+
+    $response->assertOk()
+      ->assertJsonStructure([
+        '*' => [
+          'player_id',
+          'nickname',
+          'games' => [
+            '*' => [
+              'result',
+              'won',
+            ],
+          ],
+        ],
+      ]);
+  }
 }

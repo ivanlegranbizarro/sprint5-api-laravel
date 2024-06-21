@@ -31,27 +31,6 @@ class GameController extends Controller
     return response()->json($gamesGroupedByPlayer, 200);
   }
 
-
-  /**
-   * @lrd:start
-   * # Player Index
-   * Display a listing of games for the authenticated user and calculate their success percentage.
-   *
-   * @param StatisticsService $statistics Service to calculate statistics.
-   * @return JsonResponse List of games for the authenticated user and their success percentage.
-   * @lrd:end
-   */
-  public function playerIndex(StatisticsService $statistics): JsonResponse
-  {
-    $user_id = auth()->user()->id;
-    $games = Game::where('user_id', $user_id)->get();
-    $your_statistics = $statistics->calculateSuccessPercentage($games->toArray());
-    return response()->json([
-      'games' => GameResource::collection($games),
-      'success_percentage' => $your_statistics
-    ]);
-  }
-
   /**
    * @lrd:start
    * # Play Game
@@ -70,21 +49,6 @@ class GameController extends Controller
     $newGame->won = $newGame->result >= 7;
     $newGame->save();
     return response()->json(GameResource::make($newGame), 201);
-  }
-
-  /**
-   * @lrd:start
-   * # Show Games
-   * Display a list of games for the specified user.
-   *
-   * @param User $user User whose games are to be retrieved.
-   * @return JsonResponse List of games for the specified user.
-   * @lrd:end
-   */
-  public function show(User $user): JsonResponse
-  {
-    $games = Game::where('user_id', $user->id)->get();
-    return response()->json(GameResource::collection($games), 200);
   }
 
   /**
