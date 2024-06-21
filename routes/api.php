@@ -13,7 +13,6 @@ Route::prefix('players')->group(function () {
     Route::get('{user}', [UserController::class, 'show'])->name('show');
     Route::put('{user}', [UserController::class, 'update'])->name('update');
     Route::patch('{user}', [UserController::class, 'update'])->name('update.patch');
-    Route::delete('{user}', [UserController::class, 'destroy'])->name('destroy');
 
     Route::prefix('games')->group(function () {
       Route::post('/', [GameController::class, 'playGame'])->name('playGame');
