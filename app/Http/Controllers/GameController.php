@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\GameResource;
 use App\Models\Game;
 use App\Models\User;
-use App\Services\StatisticsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 
@@ -31,27 +30,6 @@ class GameController extends Controller
     return response()->json($gamesGroupedByPlayer, 200);
   }
 
-
-  /**
-   * @lrd:start
-   * # Player Index
-   * Display a listing of games for the authenticated user and calculate their success percentage.
-   *
-   * @param StatisticsService $statistics Service to calculate statistics.
-   * @return JsonResponse List of games for the authenticated user and their success percentage.
-   * @lrd:end
-   */
-  public function playerIndex(StatisticsService $statistics): JsonResponse
-  {
-    $user_id = auth()->user()->id;
-    $games = Game::where('user_id', $user_id)->get();
-    $your_statistics = $statistics->calculateSuccessPercentage($games->toArray());
-    return response()->json([
-      'games' => GameResource::collection($games),
-      'success_percentage' => $your_statistics
-    ]);
-  }
-
   /**
    * @lrd:start
    * # Play Game
@@ -74,31 +52,15 @@ class GameController extends Controller
 
   /**
    * @lrd:start
-   * # Show Games
-   * Display a list of games for the specified user.
-   *
-   * @param User $user User whose games are to be retrieved.
-   * @return JsonResponse List of games for the specified user.
-   * @lrd:end
-   */
-  public function show(User $user): JsonResponse
-  {
-    $games = Game::where('user_id', $user->id)->get();
-    return response()->json(GameResource::collection($games), 200);
-  }
-
-  /**
-   * @lrd:start
    * # Delete Games
-   * Remove all games of the authenticated user.
+   * Remove all games for the given user.
    *
    * @param User $user User whose games are to be deleted.
    * @return JsonResponse Empty response with status code 204 on success.
    * @lrd:end
    */
-  public function destroy(): JsonResponse
+  public function destroy(User $user): JsonResponse
   {
-    $user = auth()->user();
     Gate::authorize('delete', $user);
     Game::where('user_id', $user->id)->delete();
 

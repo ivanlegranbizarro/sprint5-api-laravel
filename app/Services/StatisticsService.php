@@ -22,23 +22,28 @@ class StatisticsService
 
   public function rankingAllPlayers(Collection $users): Collection
   {
-    foreach ($users as $user) {
+    $usersWithGames = $users->filter(function ($user) {
+      return $user->games->isNotEmpty();
+    });
+
+    foreach ($usersWithGames as $user) {
       $user->success_percentage = $this->calculateSuccessPercentage($user->games->toArray());
     }
-    return $users;
+
+    return $usersWithGames->values(); // Reset keys after filtering
   }
 
   public function rankingBestPlayer(Collection $users): User
   {
     $users = $this->rankingAllPlayers($users);
-    $bestPlayer = collect($users)->sortByDesc('success_percentage')->first();
+    $bestPlayer = $users->sortByDesc('success_percentage')->first();
     return $bestPlayer;
   }
 
   public function rankingWorstPlayer(Collection $users): User
   {
     $users = $this->rankingAllPlayers($users);
-    $worstPlayer = collect($users)->sortBy('success_percentage')->first();
+    $worstPlayer = $users->sortBy('success_percentage')->first();
     return $worstPlayer;
   }
 }
