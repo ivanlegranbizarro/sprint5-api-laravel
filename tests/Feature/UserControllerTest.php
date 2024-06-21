@@ -16,6 +16,9 @@ class UserControllerTest extends TestCase
 
   protected $user;
   protected $admin;
+  protected $player1;
+  protected $player2;
+
   public function setUp(): void
   {
     parent::setUp();
@@ -26,10 +29,39 @@ class UserControllerTest extends TestCase
       'email' => 'ivan@ivan.com',
       'password' => bcrypt('password'),
     ]);
+
     $this->admin = User::factory()->create([
       'email' => 'admin@admin.com',
       'password' => bcrypt('password'),
       'role' => 'admin',
+    ]);
+
+    $this->player1 = User::factory()->create([
+      'email' => 'player1@player1.com',
+      'nickname' => 'player1',
+      'password' => bcrypt('password'),
+    ]);
+
+    $this->player2 = User::factory()->create([
+      'email' => 'player2@player2.com',
+      'nickname' => 'player2',
+      'password' => bcrypt('password'),
+    ]);
+
+    Game::create([
+      'user_id' => $this->player1->id,
+      'dice1' => 7,
+      'dice2' => 7,
+      'result' => 14,
+      'won' => 1
+    ]);
+
+    Game::create([
+      'user_id' => $this->player2->id,
+      'dice1' => 1,
+      'dice2' => 1,
+      'result' => 2,
+      'won' => 0
     ]);
   }
 
@@ -109,38 +141,6 @@ class UserControllerTest extends TestCase
   #[Test]
   public function ranking_displays_correctly_only_if_auth_and_admin(): void
   {
-    $player1 = User::factory(
-      [
-        'email' => 'player1@player1.com',
-        'nickname' => 'player1',
-        'password' => bcrypt('password'),
-      ]
-    )->create();
-
-    $player2 = User::factory(
-      [
-        'email' => 'player2@player2.com',
-        'nickname' => 'player2',
-        'password' => bcrypt('password'),
-      ]
-    )->create();
-
-    Game::create([
-      'user_id' => $player1->id,
-      'dice1' => 7,
-      'dice2' => 7,
-      'result' => 14,
-      'won' => 1
-    ]);
-
-    Game::create([
-      'user_id' => $player2->id,
-      'dice1' => 1,
-      'dice2' => 1,
-      'result' => 2,
-      'won' => 0
-    ]);
-
     $this->actingAs($this->user, 'api')->getJson('/api/players/ranking')->assertForbidden();
 
     $this->actingAs($this->admin, 'api')->getJson('/api/players/ranking')->assertOk();
@@ -149,5 +149,33 @@ class UserControllerTest extends TestCase
 
     $this->assertEquals($response->json()[0]['nickname'], 'player1');
     $this->assertEquals($response->json()[1]['nickname'], 'player2');
+  }
+
+  #[Test]
+  public function best_player_displays_correctly_only_if_auth_and_admin(): void
+  {
+    $this->getJson('/api/players/ranking/winner')->assertUnauthorized();
+
+    $this->actingAs($this->user, 'api')->getJson('/api/players/ranking/winner')->assertForbidden();
+
+    $this->actingAs($this->admin, 'api')->getJson('/api/players/ranking/winner')->assertOk();
+
+    $response = $this->actingAs($this->admin, 'api')->getJson('/api/players/ranking/winner');
+
+    $this->assertEquals($response->json()['nickname'], 'player1');
+  }
+
+  #[Test]
+  public function worst_player_displays_correctly_only_if_auth_and_admin(): void
+  {
+    $this->getJson('/api/players/ranking/loser')->assertUnauthorized();
+
+    $this->actingAs($this->user, 'api')->getJson('/api/players/ranking/loser')->assertForbidden();
+
+    $this->actingAs($this->admin, 'api')->getJson('/api/players/ranking/loser')->assertOk();
+
+    $response = $this->actingAs($this->admin, 'api')->getJson('/api/players/ranking/loser');
+
+    $this->assertEquals($response->json()['nickname'], 'player2');
   }
 }

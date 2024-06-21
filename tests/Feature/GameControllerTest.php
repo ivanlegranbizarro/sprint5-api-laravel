@@ -34,7 +34,7 @@ class GameControllerTest extends TestCase
   }
 
   #[Test]
-  public function games_need_authenticated_user_to_be_created(): void
+  public function authenticated_users_can_play_a_game(): void
   {
     $this->postJson('/api/players/games', [])->assertUnauthorized();
 
