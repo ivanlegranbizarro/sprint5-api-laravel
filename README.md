@@ -9,6 +9,9 @@ Primero, clona el proyecto desde GitHub:
     git clone https://github.com/ivanlegranbizarro/sprint5-api-laravel
     cd sprint5-api-laravel
 
+## Generar un archivo .env
+Duplica el archivo de ejemplo que existe llamado .env.example y renómbralo como .env, a secas.
+
 ## Instalar Dependencias
 
 Una vez clonado el repositorio, instala las dependencias necesarias ejecutando el siguiente comando:
@@ -21,10 +24,13 @@ Después de instalar las dependencias, genera las llaves de Laravel con el sigui
 
     php artisan key:generate
 
-## Generar Cliente de Passport
+## Se corren las migraciones del proyecto y se crea la base de datos sqlite:
 
-Finalmente, genera el cliente de Passport con el siguiente comando:
+   php artisan migrate
 
-    php artisan passport:client --personal
+## Instalamos passport y generamos sus claves
+
+    composer require laravel/passport
+    php artisan passport:keys
 
 ### La url de landing del proyecto te redirigirá hacia la documentación interactiva de la API
