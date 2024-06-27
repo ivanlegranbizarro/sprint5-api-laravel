@@ -30,7 +30,7 @@ class StatisticsService
       $user->success_percentage = $this->calculateSuccessPercentage($user->games->toArray());
     }
 
-    return $usersWithGames->values(); // Reset keys after filtering
+    return $usersWithGames->values();
   }
 
   public function rankingBestPlayer(Collection $users): User
