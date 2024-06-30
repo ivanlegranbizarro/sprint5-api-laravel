@@ -24,13 +24,14 @@ Después de instalar las dependencias, genera las llaves de Laravel con el sigui
 
     php artisan key:generate
 
-## Se corren las migraciones del proyecto y se crea la base de datos sqlite:
+## Se corren las migraciones del proyecto y los seeders y se crea la base de datos sqlite:
 
-   php artisan migrate
+   php artisan migrate --seed
 
 ## Instalamos passport y generamos sus claves
 
     composer require laravel/passport
     php artisan passport:keys
+
 
 ### La url de landing del proyecto te redirigirá hacia la documentación interactiva de la API
