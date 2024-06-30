@@ -35,7 +35,16 @@ class StoreUserRequest extends FormRequest
           }
         }
       ],
-      'password' => 'required|min:6',
+      'password' => [
+        'required',
+        'string',
+        'min:8',
+        'regex:/[a-z]/',
+        'regex:/[A-Z]/',
+        'regex:/[0-9]/',
+        'regex:/[@$!%*#?&]/'
+      ],
+      'password_confirmation' => 'required|same:password'
     ];
   }
 }
