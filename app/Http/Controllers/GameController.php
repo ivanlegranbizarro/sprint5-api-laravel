@@ -45,7 +45,7 @@ class GameController extends Controller
     $newGame->dice1 = rand(1, 6);
     $newGame->dice2 = rand(1, 6);
     $newGame->result = $newGame->dice1 + $newGame->dice2;
-    $newGame->won = $newGame->result >= 7;
+    $newGame->won = $newGame->result == 7;
     $newGame->save();
     return response()->json(GameResource::make($newGame), 201);
   }
