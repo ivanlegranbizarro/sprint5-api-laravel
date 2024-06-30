@@ -15,6 +15,7 @@ class GameControllerTest extends TestCase
   use RefreshDatabase, WithFaker;
 
   protected $user;
+  protected $user2;
   protected $admin;
   public function setUp(): void
   {
@@ -30,6 +31,10 @@ class GameControllerTest extends TestCase
       'email' => 'admin@admin.com',
       'password' => bcrypt('password'),
       'role' => 'admin',
+    ]);
+    $this->user2 = User::factory()->create([
+      'email' => 'user2@user2.com',
+      'password' => bcrypt('password'),
     ]);
   }
 
@@ -70,12 +75,34 @@ class GameControllerTest extends TestCase
       'user_id' => $this->user->id,
     ]);
 
-    $this->actingAs($this->user, 'api')->deleteJson('/api/players/' . $this->user->id . '/games')->assertForbidden();
-
     $this->assertDatabaseCount('games', 10);
 
     $this->actingAs($this->admin, 'api')->deleteJson('/api/players/' . $this->user->id . '/games')->assertNoContent();
 
     $this->assertDatabaseCount('games', 0);
+  }
+
+  #[Test]
+  public function user_can_not_delete_games_from_other_users(): void
+  {
+    Game::factory(10)->create([
+      'user_id' => $this->user->id,
+    ]);
+
+    $this->assertDatabaseCount('games', 10);
+
+    $this->actingAs($this->user2, 'api')->deleteJson('/api/players/' . $this->user->id . '/games')->assertForbidden();
+  }
+
+  #[Test]
+  public function user_can_delete_his_own_games(): void
+  {
+    Game::factory(10)->create([
+      'user_id' => $this->user->id,
+    ]);
+
+    $this->assertDatabaseCount('games', 10);
+
+    $this->actingAs($this->user, 'api')->deleteJson('/api/players/' . $this->user->id . '/games')->assertNoContent();
   }
 }

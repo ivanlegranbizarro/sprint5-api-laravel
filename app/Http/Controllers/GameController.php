@@ -61,8 +61,13 @@ class GameController extends Controller
    */
   public function destroy(User $user): JsonResponse
   {
-    Gate::authorize('delete', $user);
-    Game::where('user_id', $user->id)->delete();
+    $games = Game::where('user_id', $user->id)->get();
+
+    Gate::authorize('delete', $games->first());
+
+    foreach ($games as $game) {
+      $game->delete();
+    }
 
     return response()->json(null, 204);
   }
