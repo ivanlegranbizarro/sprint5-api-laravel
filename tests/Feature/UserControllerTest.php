@@ -27,25 +27,25 @@ class UserControllerTest extends TestCase
 
     $this->user = User::factory()->create([
       'email' => 'ivan@ivan.com',
-      'password' => bcrypt('password'),
+      'password' => bcrypt('Password1!'),
     ]);
 
     $this->admin = User::factory()->create([
       'email' => 'admin@admin.com',
-      'password' => bcrypt('password'),
+      'password' => bcrypt('Password1!'),
       'role' => 'admin',
     ]);
 
     $this->player1 = User::factory()->create([
       'email' => 'player1@player1.com',
       'nickname' => 'player1',
-      'password' => bcrypt('password'),
+      'password' => bcrypt('Password1!'),
     ]);
 
     $this->player2 = User::factory()->create([
       'email' => 'player2@player2.com',
       'nickname' => 'player2',
-      'password' => bcrypt('password'),
+      'password' => bcrypt('Password1!'),
     ]);
 
     Game::create([
@@ -70,7 +70,8 @@ class UserControllerTest extends TestCase
   {
     $this->postJson('/api/players', [
       'email' => 'test@test.com',
-      'password' => 'password',
+      'password' => 'Password1!',
+      'password_confirmation' => 'Password1!',
     ])->assertCreated();
   }
 
@@ -79,7 +80,7 @@ class UserControllerTest extends TestCase
   {
     $this->postJson('/api/players/login', [
       'email' => $this->user->email,
-      'password' => 'password',
+      'password' => 'Password1!',
     ])->assertOk();
   }
 
@@ -100,7 +101,7 @@ class UserControllerTest extends TestCase
   }
 
   #[Test]
-  public function nickname_can_be_updated_only_if_auth_and_admin(): void
+  public function nickname_can_be_updated_only_for_admin_and_player(): void
   {
     $this->putJson('/api/players/' . $this->user->id, [
       'nickname' => 'Iván',
@@ -108,7 +109,7 @@ class UserControllerTest extends TestCase
 
     $this->actingAs($this->user, 'api')->putJson('/api/players/' . $this->user->id, [
       'nickname' => 'Iván'
-    ])->assertForbidden();
+    ])->assertOk();
 
     $this->actingAs($this->admin, 'api')->putJson('/api/players/' . $this->user->id, [
       'nickname' => 'Iván'
